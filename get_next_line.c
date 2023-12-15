@@ -6,7 +6,7 @@
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:04:32 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/14 15:54:10 by aneitenb         ###   ########.fr       */
+/*   Updated: 2023/12/15 16:15:17 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*get_line(char *buffer)
 	i = 0;
 	len1 = strlentn(buffer);
 	string = malloc(len1 + 1);
-	if (!string)
+	if (!string || !buffer || buffer[0] == 0)
 		return (NULL);
 	while (i <= len1)
 	{
@@ -60,15 +60,27 @@ static char	*read_line(int fd, char *buffer)
 	int		bytes_read;
 
 	bytes_read = 1;
-	while (bytes_read != 0)
+	while (bytes_read != 0 || (ft_strchr(string, '\n') != 0))
 	{
 		bytes_read = read(fd, string, BUFFER_SIZE);
+		if (bytes_read < 0)
+			return (NULL);
 		string[bytes_read] = '\0';
 		buffer = ft_strjoin(buffer, string);
-		if (ft_strchr(string, '\n') != 0)
-			break ;
+		if (buffer == NULL)
+			return (NULL);
 	}
 	return (buffer);
+}
+
+static void	*ft_free(char *buffer, char *string)
+{
+	if (buffer || string)
+	{
+		free(string);
+		free(buffer);
+	}
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
@@ -76,23 +88,19 @@ char	*get_next_line(int fd)
 	static char		*buffer;
 	char			*string;
 
-	string = ((void *)0);
+	string = NULL;
 	if (!buffer)
 		buffer = "";
 	if (!fd || fd < 0)
 		return (NULL);
 	buffer = read_line(fd, buffer);
 	if (buffer == NULL)
-	{
-		free(string);
-		return (NULL);
-	}
+		return (ft_free(buffer, string));
 	string = get_line(buffer);
 	if (string == NULL)
-	{
-		free(string);
-		return (NULL);
-	}
+		return (ft_free(buffer, string));
 	buffer = save_remainder(buffer);
+	if (buffer == NULL)
+		return (ft_free(buffer, string));
 	return (string);
 }
