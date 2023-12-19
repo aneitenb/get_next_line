@@ -6,52 +6,21 @@
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:04:56 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/19 10:24:19 by aneitenb         ###   ########.fr       */
+/*   Updated: 2023/12/19 14:55:41 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-char	*ft_strdup(const char *s1)
-{
-	char	*dup;
-	int		i;
-
-	i = 0;
-	dup = (char *)malloc (1 * ft_strlen(s1) + 1);
-	if (dup == NULL)
-		return (NULL);
-	while (s1[i])
-	{
-		dup[i] = s1[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
-
-int	strlentn(char *string)
-{
-	int	i;
-
-	i = 0;
-	while (string[i] != '\n')
-	{
-		if (string[i] == '\0')
-			return (i - 1);
-		i++;
-	}
-	return (i);
-}
 
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
 	i = 0;
-	while (s[i] != '\0')
+	if (s != NULL)
 	{
-		i++;
+		while (s[i])
+			i++;
 	}
 	return (i);
 }
@@ -100,4 +69,34 @@ char	*ft_strchr(const char *s, int c)
 	if (s[i] == (char)c)
 		return ((char *)&s[i]);
 	return (0);
+}
+
+static void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+	char	*str;
+
+	i = 0;
+	str = (char *)s;
+	while (i < n)
+	{
+		str[i] = 0;
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
+	size_t	max;
+
+	max = 0 - 1;
+	if (count != 0)
+		if (max / count < size)
+			return (NULL);
+	ptr = (void *)malloc(count * size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, count * size);
+	return (ptr);
 }
