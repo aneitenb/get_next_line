@@ -6,7 +6,7 @@
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:04:32 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/15 16:15:17 by aneitenb         ###   ########.fr       */
+/*   Updated: 2023/12/19 10:11:13 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static char	*save_remainder(char *buffer)
 		j++;
 	}
 	string[j] = '\0';
+	free(buffer);
 	return (string);
 }
 
@@ -43,7 +44,7 @@ static char	*get_line(char *buffer)
 	i = 0;
 	len1 = strlentn(buffer);
 	string = malloc(len1 + 1);
-	if (!string || !buffer || buffer[0] == 0)
+	if (!string)
 		return (NULL);
 	while (i <= len1)
 	{
@@ -73,12 +74,12 @@ static char	*read_line(int fd, char *buffer)
 	return (buffer);
 }
 
-static void	*ft_free(char *buffer, char *string)
+static void	*ft_free(char *str)
 {
-	if (buffer || string)
+	if (str)
 	{
-		free(string);
-		free(buffer);
+		free(str);
+		str = NULL;
 	}
 	return (NULL);
 }
@@ -88,19 +89,47 @@ char	*get_next_line(int fd)
 	static char		*buffer;
 	char			*string;
 
+	if (fd < 0 || !fd || BUFFER_SIZE <= 0)
+		return (NULL);
 	string = NULL;
 	if (!buffer)
 		buffer = "";
-	if (!fd || fd < 0)
-		return (NULL);
 	buffer = read_line(fd, buffer);
-	if (buffer == NULL)
-		return (ft_free(buffer, string));
+	if (buffer == NULL || buffer[0] == '\0')
+		return (ft_free(buffer));
 	string = get_line(buffer);
 	if (string == NULL)
-		return (ft_free(buffer, string));
+		return (ft_free(buffer));
 	buffer = save_remainder(buffer);
 	if (buffer == NULL)
-		return (ft_free(buffer, string));
+		return (ft_free(buffer));
 	return (string);
+}
+
+#include <stdio.h>
+#include <fcntl.h>
+#include "get_next_line.h"
+
+int    main(void)
+{
+    char    *str;
+    int        fd;
+    int        i;
+
+    i = 1;
+    fd = open("tester.txt", O_RDONLY);
+    if (fd == -1)
+        return (-1);
+    str = get_next_line(fd);
+    printf("String[%d]: %s", i, str);
+        free(str);
+	i++;
+    while ((str = get_next_line(fd)) != NULL)
+    {
+        printf("String[%d]: %s", i, str);
+        free(str);
+        i++;
+    }
+    close (fd);
+    return (0);
 }

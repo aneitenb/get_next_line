@@ -6,11 +6,29 @@
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:04:56 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/15 13:51:49 by aneitenb         ###   ########.fr       */
+/*   Updated: 2023/12/19 10:24:19 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_strdup(const char *s1)
+{
+	char	*dup;
+	int		i;
+
+	i = 0;
+	dup = (char *)malloc (1 * ft_strlen(s1) + 1);
+	if (dup == NULL)
+		return (NULL);
+	while (s1[i])
+	{
+		dup[i] = s1[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
+}
 
 int	strlentn(char *string)
 {
@@ -20,7 +38,7 @@ int	strlentn(char *string)
 	while (string[i] != '\n')
 	{
 		if (string[i] == '\0')
-			return (i);
+			return (i - 1);
 		i++;
 	}
 	return (i);
@@ -38,7 +56,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*new;
 	size_t	i;
