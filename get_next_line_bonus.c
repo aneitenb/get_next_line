@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 13:04:32 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/21 17:10:19 by aneitenb         ###   ########.fr       */
+/*   Created: 2023/12/20 10:30:55 by aneitenb          #+#    #+#             */
+/*   Updated: 2023/12/21 16:48:47 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*save_remainder(char *buffer)
 {
@@ -103,28 +103,28 @@ char	*read_line(int fd, char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char		*buffer;
+	static char		*buffer[3000];
 	char			*string;
 
 	if (fd < 0 || read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
 	{
-		free(buffer);
-		buffer = NULL;
+		free(buffer[fd]);
+		buffer[fd] = NULL;
 		return (NULL);
 	}
-	buffer = read_line(fd, buffer);
-	if (buffer == NULL || buffer[0] == '\0')
+	buffer[fd] = read_line(fd, buffer[fd]);
+	if (buffer[fd] == NULL || buffer[fd][0] == '\0')
 	{
-		free(buffer);
-		buffer = NULL;
+		free(buffer[fd]);
+		buffer[fd] = NULL;
 		return (NULL);
 	}
-	string = get_lines(buffer);
+	string = get_lines(buffer[fd]);
 	if (string == NULL)
 	{
-		buffer = NULL;
+		buffer[fd] = NULL;
 		return (NULL);
 	}
-	buffer = save_remainder(buffer);
+	buffer[fd] = save_remainder(buffer[fd]);
 	return (string);
 }

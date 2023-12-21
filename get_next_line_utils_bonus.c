@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 13:04:56 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/21 17:28:38 by aneitenb         ###   ########.fr       */
+/*   Created: 2023/12/20 10:30:29 by aneitenb          #+#    #+#             */
+/*   Updated: 2023/12/21 15:47:30 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *str)
 {
@@ -80,11 +80,12 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char	*ft_calloc(size_t count, size_t size)
+void	*ft_calloc(size_t count, size_t size)
 {
-	char	*ptr;
+	void	*ptr;
 	size_t	max;
 	size_t	i;
+	char	*str;
 
 	max = 0 - 1;
 	i = 0;
@@ -94,9 +95,10 @@ char	*ft_calloc(size_t count, size_t size)
 	ptr = (void *)malloc(count * size);
 	if (ptr == NULL)
 		return (NULL);
+	str = (char *)ptr;
 	while (i < (count * size))
 	{
-		ptr[i] = 0;
+		str[i] = 0;
 		i++;
 	}
 	return (ptr);
