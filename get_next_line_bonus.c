@@ -6,7 +6,7 @@
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 10:30:55 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/21 16:48:47 by aneitenb         ###   ########.fr       */
+/*   Updated: 2024/01/02 10:08:45 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,14 @@ char	*read_line(int fd, char *buffer)
 	bytes_read = 1;
 	string = ft_calloc(sizeof(char), 1);
 	if (string == NULL)
-		return (ft_free(string));
+		return (ft_free(buffer));
 	if (!buffer)
 		buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (buffer == NULL)
-		return (NULL);
+		return (ft_free(string));
 	string = ft_join(string, buffer);
+	if (string == NULL)
+		return (ft_free(buffer));
 	while (bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -94,6 +96,8 @@ char	*read_line(int fd, char *buffer)
 			return (NULL);
 		buffer[bytes_read] = '\0';
 		string = ft_join(string, buffer);
+		if (string == NULL)
+			return (ft_free(buffer));
 		if (ft_strchr(string, '\n') != 0)
 			break ;
 	}
