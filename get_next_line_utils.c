@@ -6,13 +6,13 @@
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:04:56 by aneitenb          #+#    #+#             */
-/*   Updated: 2024/01/02 09:26:58 by aneitenb         ###   ########.fr       */
+/*   Updated: 2024/01/02 15:06:22 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+static size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
@@ -25,7 +25,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-static char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *string, char *buffer)
 {
 	char	*new;
 	size_t	i;
@@ -33,50 +33,42 @@ static char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	if (!s1 || !s2)
+	if (!string || !buffer)
 		return (NULL);
-	new = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	new = malloc(ft_strlen(string) + ft_strlen(buffer) + 1);
 	if (new == NULL)
-		return (NULL);
-	while (s1[i] != '\0')
+		return (ft_free(string));
+	while (string[i] != '\0')
 	{
-		new[i] = s1[i];
+		new[i] = string[i];
 		i++;
 	}
-	while (s2[j] != '\0')
+	while (buffer[j] != '\0')
 	{
-		new[i] = s2[j];
+		new[i] = buffer[j];
 		i++;
 		j++;
 	}
 	new[i] = '\0';
+	free(string);
 	return (new);
 }
 
-char	*ft_join(char *string, char *buffer)
-{
-	char	*temp;
-
-	temp = ft_strjoin(string, buffer);
-	free(string);
-	return (temp);
-}
-
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *str, int c)
 {
 	int		i;
 
 	i = 0;
-	while (s[i] != '\0')
+	while (str[i] != '\0')
 	{
-		if (s[i] == (char)c)
+		if (str[i] == (char)c)
 		{
-			return ((char *)&s[i]);
+			return ((char *)&str[i]);
 		}
 		i++;
 	}
-	if (s[i] == (char)c)
-		return ((char *)&s[i]);
+	if (str[i] == (char)c)
+		return ((char *)&str[i]);
 	return (0);
 }
 
@@ -100,4 +92,11 @@ char	*ft_calloc(size_t count, size_t size)
 		i++;
 	}
 	return (ptr);
+}
+
+char	*ft_free(char *string)
+{
+	free(string);
+	string = NULL;
+	return (NULL);
 }

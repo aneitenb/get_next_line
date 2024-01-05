@@ -6,7 +6,7 @@
 /*   By: aneitenb <aneitenb@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 10:27:21 by aneitenb          #+#    #+#             */
-/*   Updated: 2023/12/21 16:39:51 by aneitenb         ###   ########.fr       */
+/*   Updated: 2024/01/02 15:06:34 by aneitenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include <stdlib.h> 
 
 char	*get_next_line(int fd);
-size_t	ft_strlen(const char *str);
-char	*ft_strchr(const char *s, int c);
+char	*ft_strchr(const char *str, int c);
 void	*ft_calloc(size_t count, size_t size);
-char	*ft_join(char *string, char *buffer);
+char	*ft_strjoin(char *string, char *buffer);
+char	*ft_free(char *string);
 
 #endif
